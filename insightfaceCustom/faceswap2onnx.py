@@ -36,7 +36,7 @@ def convert_onnx(net, path_module, output, opset=11, simplify=False):
     model = onnx.load(output)
     graph = model.graph
     
-    # Set dynamic batch sizes for BOTH inputs
+    #  Set dynamic batch sizes for BOTH inputs
     graph.input[0].type.tensor_type.shape.dim[0].dim_param = 'None'
     graph.input[1].type.tensor_type.shape.dim[0].dim_param = 'None'
     
@@ -63,8 +63,10 @@ if __name__ == '__main__':
         input_file_path = os.path.join(input_file_path, "faceswap_model.pt")
     assert os.path.exists(input_file_path)
     assert args.network is not None
+
     print(args)
     backbone_onnx = get_model(args.network, dropout=0.0, fp16=False, num_features=512)
     if args.output is None:
         args.output = os.path.join(os.path.dirname(args.input), "faceswap_model.onnx")
+
     convert_onnx(backbone_onnx, input_file_path, args.output, simplify=args.simplify)
